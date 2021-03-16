@@ -1,0 +1,10 @@
+{
+	"default_output": "data.json",
+	"iceberg_probability": 0.2,
+	"price_mean": 500,
+	"price_deviation": 100,
+	"quantity_mean": 1000,
+	"quantity_deviation": 400,
+	"peak_min": 10,
+	"peak_max": 400
+}

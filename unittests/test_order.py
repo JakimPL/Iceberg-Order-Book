@@ -33,6 +33,30 @@ class TestOrderStructure(unittest.TestCase):
         order2 = Order((2, "Limit", "Sell", 20, 100, 0))
         self.assertLess(order1, order2)
 
+    def test_order_simple_dictionary(self):
+        order = Order((1, "Iceberg", "Sell", 30, 100, 10))
+        order_dictionary = order.__dict__()
+
+        self.assertEqual(order_dictionary.get('id'), 1)
+        self.assertEqual(order_dictionary.get('price'), 30)
+        self.assertEqual(order_dictionary.get('quantity'), 10)
+        self.assertEqual(order_dictionary.get('peak'), None)
+        self.assertEqual(order_dictionary.get('direction'), None)
+        self.assertEqual(order_dictionary.get('type'), None)
+
+    def test_order_detailed_dictionary(self):
+        order = Order((1, "Iceberg", "Sell", 30, 100, 10))
+        order_dictionary = order.__dict__(simple=False)
+        order_info_dictionary = order_dictionary.get('order')
+
+        print(order_dictionary)
+        self.assertEqual(order_info_dictionary.get('id'), 1)
+        self.assertEqual(order_info_dictionary.get('price'), 30)
+        self.assertEqual(order_info_dictionary.get('quantity'), 10)
+        self.assertEqual(order_info_dictionary.get('peak'), 10)
+        self.assertEqual(order_info_dictionary.get('direction'), "Sell")
+        self.assertEqual(order_dictionary.get('type'), "Iceberg")
+
 
 if __name__ == '__main__':
     unittest.main()

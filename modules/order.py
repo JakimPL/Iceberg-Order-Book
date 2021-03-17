@@ -29,6 +29,7 @@ class Order:
         """
         Create an order object from either JSON line
         or a tuple of the form (id, type, direction, price, quantity, peak).
+        Checks the correctness of the data.
         """
 
         if isinstance(input_data, str):
@@ -63,8 +64,14 @@ class Order:
 
             self.hidden_quantity = 0
 
-        if self.price == 0 or self.quantity == 0:
-            raise ValueError('price of the order cannot be zero')
+        if self.price == 0:
+            raise ValueError("price of the order cannot be zero")
+        if self.quantity == 0:
+            raise ValueError("quantity of the order cannot be zero")
+        if not (self.type == "Limit" or self.type == "Iceberg"):
+            raise ValueError("the type of the order has to be either 'Limit' or 'Iceberg'")
+        if not (self.direction == "Buy" or self.direction == "Sell"):
+            raise ValueError("the direction of the order has to be either 'Buy' or 'Sell'")
 
     def __eq__(self, other):
         """

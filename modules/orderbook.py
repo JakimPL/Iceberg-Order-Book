@@ -20,6 +20,8 @@ class OrderBook:
         """
 
         self.__store_transactions = store_transactions
+        self.__buy_orders = SortedList()
+        self.__sell_orders = SortedList()
 
     def __repr__(self):
         """
@@ -71,8 +73,8 @@ class OrderBook:
         Returns the current order book status.
         """
 
-        return json.dumps({'buyOrders': OrderBook.__serialize(self.__buy_orders),
-                           'sellOrders': OrderBook.__serialize(self.__sell_orders)})
+        return json.dumps({'buyOrders': self.__serialize(self.__buy_orders),
+                           'sellOrders': self.__serialize(self.__sell_orders)})
 
     def __match_order(self, new_order: Order):
         """
@@ -100,15 +102,12 @@ class OrderBook:
 
         Returns the order book lists of orders of the same direction.
         If 'swap_lists' is true, the list of orders of opposed direction is returned.
-        Raises ValueError if the order direction is neither 'Buy' nor 'Sell'.
         """
 
         if order.direction == "Buy":
             return self.__sell_orders if swap_lists else self.__buy_orders
         elif order.direction == "Sell":
             return self.__buy_orders if swap_lists else self.__sell_orders
-        else:
-            raise ValueError("wrong direction of an order (should be either Buy or Sell)")
 
     def __get_timestamp(self):
         """
@@ -166,8 +165,8 @@ class OrderBook:
                 order.hidden_quantity -= difference
                 orders_list.add(order)
 
-    @classmethod
-    def __serialize(cls, order_list: SortedList[Order]) -> list[dict]:
+    @staticmethod
+    def __serialize(order_list: SortedList[Order]) -> list[dict]:
         """
         :param order_list:          sorted list of orders
         :return:                    list of orders as dictionary objects

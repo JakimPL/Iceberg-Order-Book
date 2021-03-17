@@ -49,7 +49,6 @@ class TestOrderStructure(unittest.TestCase):
         order_dictionary = order.__dict__(simple=False)
         order_info_dictionary = order_dictionary.get('order')
 
-        print(order_dictionary)
         self.assertEqual(order_info_dictionary.get('id'), 1)
         self.assertEqual(order_info_dictionary.get('price'), 30)
         self.assertEqual(order_info_dictionary.get('quantity'), 10)

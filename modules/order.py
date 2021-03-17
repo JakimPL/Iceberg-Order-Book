@@ -32,38 +32,39 @@ class Order:
         """
 
         if isinstance(input_data, str):
-            try:
-                data = json.loads(input_data)
-                order_data = data['order']
+            data = json.loads(input_data)
+            order_data = data['order']
 
-                self.type = data['type']
-                self.direction = order_data['direction']
-                self.id = order_data['id']
-                self.price = order_data['price']
-                self.quantity = order_data['quantity']
-                if self.type == "Iceberg" and 'peak' in order_data:
-                    self.peak = order_data['peak']
-                else:
-                    self.peak = 0
-            except json.JSONDecodeError as error:
-                print("JSON decoder error: " + str(error))
-            except KeyError as error:
-                print("Missing an order key: " + str(error))
+            self.type = data['type']
+            self.direction = order_data['direction']
+            self.id = order_data['id']
+            self.price = order_data['price']
+            self.quantity = order_data['quantity']
+            if self.type == "Iceberg" and 'peak' in order_data:
+                self.peak = order_data['peak']
+            else:
+                self.peak = 0
 
         elif isinstance(input_data, tuple):
-            try:
-                self.id, self.type, self.direction, self.price, self.quantity, self.peak = input_data
-            except ValueError as error:
-                print("Value error: " + str(error))
+            self.id, self.type, self.direction, self.price, self.quantity, self.peak = input_data
 
         else:
             raise TypeError("expected a JSON line or a tuple")
 
+        self.timestamp = self.id
         if self.peak > 0:
+            if self.type == "Limit":
+                raise ValueError("limit orders can't have a positive 'peak'")
             self.hidden_quantity = max(self.quantity - self.peak, 0)
             self.quantity = min(self.quantity, self.peak)
         else:
+            if self.type == "Iceberg":
+                raise ValueError("iceberg orders can't have zero 'peak'")
+
             self.hidden_quantity = 0
+
+        if self.price == 0 or self.quantity == 0:
+            raise ValueError('price of the order cannot be zero')
 
     def __eq__(self, other):
         """

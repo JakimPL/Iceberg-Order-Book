@@ -48,7 +48,7 @@ To close the session one can type `exit`.
 
 ## Series of data
 
-There is a possibility to run a series of data from a JSON file. An example is stored in the file `example.json`. To perform orders from a file use:
+There is a possibility to run a series of data from a JSON file. An example is stored in the file `example.json`. To perform orders from a file use the following:
 
 `python main.py [input]`
 
@@ -62,7 +62,7 @@ The order book provides a way to generate random data based on normal/uniform di
 
 `python main.py --generate-orders [number] --output [output]` or `python main.py -g [number] -o [output]`
 
-where `number` stands for the number of orders and `output` is the output filename. If the output is not specified, the default filename is used (`data.json` by default). For example:
+where `number` stands for the number of orders and `output` is the output filename. If an output is not specified, the default filename is used (`data.json` by default). For example:
 
 `python main.py -g 100000 -o random_orders.json`
 
@@ -74,7 +74,7 @@ Parameters of distributions such as:
 * `price_deviation` - standard deviation for *price* field,
 * `quantity_mean` - normal distribution mean for *quantity* field,
 * `quantity_deviation` - standard deviation for *quantity* field,
-* `peak_min` - minimum value of *peak* field,
-* `peak_max` - maximum value of *peak* field
+* `peak_min` - a minimum value of *peak* field,
+* `peak_max` - a maximum value of *peak* field
 
 are stored in `config.json`.
